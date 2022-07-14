@@ -1,3 +1,6 @@
 import numpy as np
+import pandas as pd
 
-print((100 * np.exp(np.random.randn(100) * 0.15)).astype(int))
+df = pd.read_csv("./data/taobao_hot.csv", nrows=50)
+res = [eval(item) for item in df["item_list"]]
+print(res)
