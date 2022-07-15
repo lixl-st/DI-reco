@@ -1,5 +1,4 @@
-from re import L
-import pandas as pd
+import json
 import torch
 import torch.nn as nn
 from torch.utils.data import Dataset
@@ -29,8 +28,8 @@ class RecoData(Dataset):
         self.user_id = [torch.tensor(v, dtype=torch.long) for v in df["user"].values]
         self.target_item_id = [torch.tensor(v, dtype=torch.long) for v in df["item"]]
         self.target_category_id = [torch.tensor(v, dtype=torch.long) for v in df["category"]]
-        self.history_item_id = [torch.tensor(v, dtype=torch.long) for v in df["item_list"].apply(lambda x: [int(i) for i in eval(x)])]
-        self.history_category_id = [torch.tensor(v, dtype=torch.long) for v in df["cate_list"].apply(lambda x: [int(i) for i in eval(x)])]
+        self.history_item_id = [torch.tensor(json.loads(v), dtype=torch.long) for v in df["item_list"]]
+        self.history_category_id = [torch.tensor(json.loads(v), dtype=torch.long) for v in df["cate_list"]]
         self.history_action_id = [torch.tensor(v, dtype=torch.long) for v in df["behavior_list"].apply(lambda x: [history_action_mapping(i) for i in eval(x)])]
         self.label = [torch.tensor(reward_mapping(v), dtype=torch.float) for v in df["behavior"]]
         del df
